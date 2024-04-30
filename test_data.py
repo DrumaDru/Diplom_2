@@ -20,3 +20,4 @@ new_name = helpers.generate_random_data_payload()["name"]
 bun = "61c0c5a71d1f82001bdaaa6d" #Флюоресцентная булка R2-D3
 filling = "61c0c5a71d1f82001bdaaa6f" #Мясо бессмертных моллюсков Protostomia
 
+failed_hash = helpers.generate_random_hash()

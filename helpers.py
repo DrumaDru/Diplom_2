@@ -15,11 +15,14 @@ class Helpers:
             letters = string.ascii_lowercase
             random_string = ''.join(random.choice(letters) for i in range(length))
             return random_string
-        # генерируем логин, пароль и имя курьера
+
+
+                # генерируем логин, пароль и имя курьера
         email_random_part = generate_random_string(10)
         email = email_random_part + "@yandex.ru"
         password = generate_random_string(10)
         name = generate_random_string(10)
+
 
         # собираем тело запроса
         payload = {
@@ -30,6 +33,16 @@ class Helpers:
         # возвращаем payload
         return payload
 
+    def generate_random_hash(self):
+        def generate_random_hash(length):
+            characters = string.ascii_lowercase + string.digits
+            random_hash = ''.join(random.choice(characters) for i in range(length))
+            return random_hash
+
+                 # генерирум хеш ингредиента
+        random_hash = generate_random_hash(24)
+
+        return random_hash
 
     def registration_user(self, payload):
         response = requests.post(f"{test_data.curl}/api/auth/register", data=payload)
@@ -71,5 +84,26 @@ class Helpers:
             }
         payload = json.dumps(payload)
         response = requests.post(f"{test_data.curl}/api/orders", headers=headers, data=payload)
+
+        return response
+
+    def unauthorized_order(self, payload):
+        payload = payload
+        response = requests.post(f"{test_data.curl}/api/orders", data=payload)
+
+        return response
+
+    def get_order_authorized_user(self):
+        token = self.login_user(test_data.login_payload).json()["accessToken"]
+        headers = {
+                "Authorization": f"{token}",
+                 "Content-Type": "application/json"
+            }
+        response = requests.get(f"{test_data.curl}/api/orders", headers=headers)
+
+        return response
+
+    def get_order_unauthorized_user(self):
+        response = requests.get(f"{test_data.curl}/api/orders")
 
         return response
