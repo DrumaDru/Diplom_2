@@ -10,9 +10,9 @@ class TestRegister:
         helpers = Helpers()
         payload = helpers.generate_random_data_payload()
 
-        responce = helpers.registration_user(payload)
+        response = helpers.registration_user(payload)
 
-        assert responce.status_code == 200 and responce.json()["user"]["email"] == payload["email"]
+        assert response.status_code == 200 and response.json()["user"]["email"] == payload["email"]
 
 
 
@@ -21,9 +21,9 @@ class TestRegister:
         payload = helpers.generate_random_data_payload()
         helpers.registration_user(payload)
 
-        responce = helpers.registration_user(payload)
+        response = helpers.registration_user(payload)
 
-        assert responce.status_code == 403 and responce.json()["message"] == "User already exists"
+        assert response.status_code == 403 and response.json()["message"] == "User already exists"
 
     @pytest.mark.parametrize("payload", [
         {"password": test_data.password, "name": test_data.name},
@@ -35,9 +35,9 @@ class TestRegister:
         helpers = Helpers()
 
 
-        responce = helpers.registration_user(payload)
+        response = helpers.registration_user(payload)
 
-        assert responce.status_code == 403 and responce.json()["message"] == "Email, password and name are required fields"
+        assert response.status_code == 403 and response.json()["message"] == "Email, password and name are required fields"
 
 
 
