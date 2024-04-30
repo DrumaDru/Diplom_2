@@ -5,6 +5,7 @@ import allure
 import test_data
 import string
 import random
+import test_data
 
 class Helpers:
 
@@ -32,4 +33,32 @@ class Helpers:
 
     def registration_user(self, payload):
         response = requests.post(f"{test_data.curl}/api/auth/register", data=payload)
+        return response
+
+
+    def login_user(self, payload):
+        response = requests.post(f"{test_data.curl}/api/auth/login", data=payload)
+        return response
+
+    # token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MzBkOWQ4OWVkMjgwMDAxYjNmMzU4ZiIsImlhdCI6MTcxNDQ3NzU3NCwiZXhwIjoxNzE0NDc4Nzc0fQ.MYAP0esMz2tBiablBFrZXPg02o4rPyFLbpU82Cv0I0g'
+    #
+    #
+
+    def authorized_user_change(self, payload):
+        token = self.login_user(test_data.login_payload).json()["accessToken"]
+        headers = {
+                "Authorization": f"{token}",
+                 "Content-Type": "application/json"
+            }
+        payload = json.dumps(payload)
+
+        response = requests.patch(f"{test_data.curl}/api/auth/user", headers=headers, data=payload)
+
+        return response
+
+    def unauthorized_user_change(self, payload):
+        payload = json.dumps(payload)
+
+        response = requests.patch(f"{test_data.curl}/api/auth/user", data=payload)
+
         return response
