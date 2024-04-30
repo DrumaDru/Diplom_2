@@ -62,3 +62,14 @@ class Helpers:
         response = requests.patch(f"{test_data.curl}/api/auth/user", data=payload)
 
         return response
+
+    def authorized_order(self, payload):
+        token = self.login_user(test_data.login_payload).json()["accessToken"]
+        headers = {
+                "Authorization": f"{token}",
+                 "Content-Type": "application/json"
+            }
+        payload = json.dumps(payload)
+        response = requests.post(f"{test_data.curl}/api/orders", headers=headers, data=payload)
+
+        return response
