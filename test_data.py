@@ -1,4 +1,3 @@
-import random
 from helpers import Helpers
 
 curl = "https://stellarburgers.nomoreparties.site"

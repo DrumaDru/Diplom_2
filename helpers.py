@@ -17,7 +17,7 @@ class Helpers:
             return random_string
 
 
-                # генерируем логин, пароль и имя курьера
+        # генерируем логин, пароль и имя курьера
         email_random_part = generate_random_string(10)
         email = email_random_part + "@yandex.ru"
         password = generate_random_string(10)
@@ -39,7 +39,7 @@ class Helpers:
             random_hash = ''.join(random.choice(characters) for i in range(length))
             return random_hash
 
-                 # генерирум хеш ингредиента
+        # генерирум хеш ингредиента
         random_hash = generate_random_hash(24)
 
         return random_hash
@@ -52,10 +52,6 @@ class Helpers:
     def login_user(self, payload):
         response = requests.post(f"{test_data.curl}/api/auth/login", data=payload)
         return response
-
-    # token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MzBkOWQ4OWVkMjgwMDAxYjNmMzU4ZiIsImlhdCI6MTcxNDQ3NzU3NCwiZXhwIjoxNzE0NDc4Nzc0fQ.MYAP0esMz2tBiablBFrZXPg02o4rPyFLbpU82Cv0I0g'
-    #
-    #
 
     def authorized_user_change(self, payload):
         token = self.login_user(test_data.login_payload).json()["accessToken"]
