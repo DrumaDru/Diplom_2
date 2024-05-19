@@ -9,6 +9,8 @@ import test_data
 
 class Helpers:
 
+    @allure.step('Создаем метод, который генерирует значения элементов словаря и возвращает его,'
+                 'при вызове метода.')
     def generate_random_data_payload(self):
         # метод генерирует строку, состоящую только из букв нижнего регистра, в качестве параметра передаём длину строки
         def generate_random_string(length):
@@ -33,6 +35,7 @@ class Helpers:
         # возвращаем payload
         return payload
 
+    @allure.step('Создаем метод, который генерирует случайный хеш ингредиента и возвращает его значение.')
     def generate_random_hash(self):
         def generate_random_hash(length):
             characters = string.ascii_lowercase + string.digits
@@ -44,15 +47,21 @@ class Helpers:
 
         return random_hash
 
+    @allure.step('Создаем метод, который выполняет запрос на регистрацию пользователя с передачей в тело запроса,'
+                 'сгенерированных значений элементов словаря payload и возвращает ответ, состоящий из статуса и тела овтета.')
     def registration_user(self, payload):
         response = requests.post(f"{test_data.curl}/api/auth/register", data=payload)
         return response
 
-
+    @allure.step('Создаем метод, который выполняет запрос на авторизацию пользователя и возвращает ответ,'
+                 'состоящий из статуса и тело ответа.')
     def login_user(self, payload):
         response = requests.post(f"{test_data.curl}/api/auth/login", data=payload)
         return response
 
+    @allure.step('Создаем метод, который, вызывает метод на авторизацию пользователя и получает из тела ответа токен доступа.'
+                 'Далее, метод, выполняет запрос на изменение данных пользователя и возвращает ответ, который содержит статус и'
+                 'тело овтета.')
     def authorized_user_change(self, payload):
         token = self.login_user(test_data.login_payload).json()["accessToken"]
         headers = {
@@ -65,6 +74,8 @@ class Helpers:
 
         return response
 
+    @allure.step('Создаем метод, который выполняет запрос на изменение данных для неавторизованного пользователя и'
+                 'возвращает ответ, который содержит статус и тело овтета.')
     def unauthorized_user_change(self, payload):
         payload = json.dumps(payload)
 
@@ -72,6 +83,9 @@ class Helpers:
 
         return response
 
+    @allure.step('Создаем метод, который вызывает метод на авторизацию пользователя и получает из тела ответа токен доступа.'
+                 'Далее, метод выполняет запрос, на создание нового заказа и возвращает ответ,'
+                 'который содержит статус и тело овтета.')
     def authorized_order(self, payload):
         token = self.login_user(test_data.login_payload).json()["accessToken"]
         headers = {
@@ -83,12 +97,17 @@ class Helpers:
 
         return response
 
+    @allure.step('Создаем метод, который выполняет запрос на создание нового заказа для неавторизованного пользователя'
+                 'и возвращает ответ, который содержит статус и тело овтета.')
     def unauthorized_order(self, payload):
         payload = payload
         response = requests.post(f"{test_data.curl}/api/orders", data=payload)
 
         return response
 
+    @allure.step('Создаем метод, который вызывает метод на авторизацию пользователя и получает из тела ответа токен доступа.'
+                 'Далее метод, выполняет запрос на получение заказов для авторизованного пользователя и возвращает ответ,'
+                 'который содержит статус и тело овтета.')
     def get_order_authorized_user(self):
         token = self.login_user(test_data.login_payload).json()["accessToken"]
         headers = {
@@ -99,6 +118,9 @@ class Helpers:
 
         return response
 
+
+    @allure.step('Создаем метод, который выполняет запрос на получение заказов для неавторизованного пользователя и возвращает ответ,'
+                 'который содержит статус и тело овтета.')
     def get_order_unauthorized_user(self):
         response = requests.get(f"{test_data.curl}/api/orders")
 

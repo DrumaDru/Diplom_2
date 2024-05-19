@@ -12,20 +12,18 @@ class TestUser:
                         'Передаем объекты в тело запроса на изменение данных.'
                         'Проверяем, что приходит стауст ответа с кодом 200 и тело ответа содержит значение'
                         'True в элементе success, при изменении пароля и содержит имя, переданное в тело запроса')
-    @pytest.mark.parametrize("payload", [
-        {"password": test_data.login_payload["password"]},
-        {"name": test_data.new_name}
+    @pytest.mark.parametrize('payload_psw, payload_name', [
+        ({"password": test_data.login_payload["password"]},
+         {"name": test_data.new_name})
     ])
-    def test_authorized_user_change(self, payload):
+    def test_authorized_user_change(self, payload_psw, payload_name):
         helpers = Helpers()
 
-        response = helpers.authorized_user_change(payload)
+        response = helpers.authorized_user_change(payload_psw)
+        assert response.status_code == 200 and response.json()["success"] == True
 
-        if "password" in payload:
-            assert response.status_code == 200 and response.json()["success"] == True
-
-        if "name" in payload:
-            assert response.status_code == 200 and response.json()["user"]["name"] == payload["name"]
+        response = helpers.authorized_user_change(payload_name)
+        assert response.status_code == 200 and response.json()["user"]["name"] == payload_name["name"]
 
     @allure.title('Проверка получения статус ответа с кодом 401 при передачи в тело запроса данных для изменения,'
                   'для неавторизованного пользователя')
